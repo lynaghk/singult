@@ -1,0 +1,6 @@
+dev_public/
+public/
+spec/javascripts/*.js
+.lein-cljsbuild*
+pkg/
+target/

@@ -1,0 +1,7 @@
+src_dir: dev_public/js
+src_files:
+  - Singult.js
+
+spec_dir: spec/javascripts
+spec_files:
+  - spec_singult.js

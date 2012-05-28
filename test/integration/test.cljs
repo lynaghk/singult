@@ -43,18 +43,24 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;Test merging
-(def $a (render [:div {:style {:color "blue"}}
-                 "Yo"
-                 [:span ""]]))
-(def b [:div {:style {:color "red"}}
-        "Rad"
-        [:span {:style {:color "blue"}}]])
+;;Test merge!
 
-(append! $test $a)
-(assert (= "Yo" (.-innerText $test)))
-(merge! $a b)
-(assert (= "Rad" (.-innerText $test)))
+;;It should update atts and append children, if given an empty container
+(merge! $test [:div#test {:a "1"}
+               [:span "1"]])
+
+(assert (= "1" (.getAttribute $test "a")))
+(assert (= "SPAN" (.-tagName (aget (.-children $test) 0))))
+
+(merge! $test [:div#test {:a "17"}
+               [:span {:b "1"} "1"]
+               [:p "grr"]])
+
+(assert (= "17" (.getAttribute $test "a")))
+(assert (= "SPAN" (.-tagName (aget (.-children $test) 0))))
+(assert (= "1" (.getAttribute (aget (.-children $test) 0) "b")))
+(assert (= "P" (.-tagName (aget (.-children $test) 1))))
+
 
 (clear! $test)
 

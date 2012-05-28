@@ -216,17 +216,30 @@ singult.coffee.merge = ($e, m) ->
     if unify_p m.children[0] #the children are data driven; recurse to unify
       singult.coffee.merge $e, m.children[0]
     else #the children are not data-driven; merge, assuming they match up by type & index
+      if $e.childNodes.length > m.children.length
+        throw "Removing DOM nodes in singult.core#merge! not yet implemented = ("
+
       i = 0
-      while i < $e.childNodes.length
+      while i < m.children.length
         c = m.children[i] or ""
         $c = $e.childNodes[i]
-        switch $c.nodeType
-          when 1 then singult.coffee.merge $c, c
-          when 3 then $c.textContent = c
+
+        if string_p(c)
+          if $c?
+            $c.textContent = c
           else
-            p $c
-            p c
-            throw "Cannot merge children"
+            $e.appendChild document.createTextNode c
+
+        else if map_p(c)
+          if $c?
+            singult.coffee.merge $c, c
+          else
+            $e.appendChild singult.coffee.render c
+
+        else
+          p $c
+          p c
+          throw "Cannot merge children"
         i += 1
   #Return element
   return $e

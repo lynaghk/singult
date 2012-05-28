@@ -6,7 +6,7 @@
     /____//_//_/ /_/ \__, / \__,_//_/ \__/  
                     /____/                  
 
-          "The act of catching one's breath while sobbing."
+          From the Latin; "a hiccup, a speech broken by sobs"
 
 JavaScript implementation of Hiccup HTML templating library.
 This implementation is speed; all other concerns are secondary.
@@ -59,4 +59,11 @@ You'll need Ruby toys:
     bundle install
     bundle exec guard
 
-Specs written with Jasmine; they'll be run automatically by guard on changes.
+PhantomJS must be installed to run tests:
+
+    lein cljsbuild test
+
+will compile and run all tests.
+
+Jasmine specs in `/spec` will be fleshed out more if our JavaScript
+friends start using the library.

@@ -218,7 +218,7 @@ singult.coffee.merge = ($e, m) ->
     else #the children are not data-driven; merge, assuming they match up by type & index
       i = 0
       while i < $e.childNodes.length
-        c = m.children[i]
+        c = m.children[i] or ""
         $c = $e.childNodes[i]
         switch $c.nodeType
           when 1 then singult.coffee.merge $c, c

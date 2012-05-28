@@ -6,15 +6,18 @@
   
   :min-lein-version "2.0.0"
 
-  :plugins [[lein-cljsbuild "0.1.10"]]
+  :plugins [[lein-cljsbuild "0.2.1"]]
 
   :source-paths ["src/clj" "src/cljs"]
   
   :resource-paths ["pkg"]
   
   :cljsbuild {:builds
-              [{:source-path "src/cljs"
-                :compiler {:output-to "public/cljs_test.js"
-                           :libs ["dev_public/js/Singult.js"]
-                           :optimizations :advanced}
-                :jar false}]})
+              {:test {:source-path "test"
+                      :compiler {:output-to "public/cljs_test.js"
+                                 :libs ["dev_public/js/Singult.js"]
+                                 :optimizations :advanced}
+                      :jar false}}
+              
+              :test-commands {"integration" ["phantomjs"
+                                             "test/integration/runner.coffee"]}})

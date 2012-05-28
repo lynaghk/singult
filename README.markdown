@@ -36,20 +36,57 @@ canonical map representation:
 
 which is then rendered to DOM elements.
 
-A `merge` function is also provided that merges an existing DOM node
-with a canonical hiccup representation.
-
-
 Install / Use
 --------------
-No explicit JavaScript API; Singult was built for use from
-ClojureScript: add
+Singult was built for use from ClojureScript, but does not depend on
+anything beyond what the Google Closure library.
+To use from ClojureScript, add:
 
     [com.keminglabs/singult "0.1.0-SNAPSHOT"]
 
-to your `project.clj` and `:libs ["singult"]` to your ClojureScript
-compiler settings. Singult supports Google Closure's advanced
-compilation mode.
+to your `project.clj`. If you are not using lein cljsbuild >= 0.2.1,
+you must add `:libs ["singult"]` to your ClojureScript compiler
+settings. Singult fully supports Google Closure's advanced compilation
+mode.
+
+Singult provides two functions and a datatype.
+
++ `render` takes a hiccup array (described above) and returns a live
+DOM node.
+
++ `merge` takes a live DOM node and a hiccup array, and projects the
+latter onto the former. That is, the live node (and its children, if
+any) will be given the attributes and inline styles of the node(s)
+described by the hiccup vector. Merging is useful compared to removing
+and re-rendering and appending a node and its children because it
+maintains object consistency, which allows you to use CSS animations
+and directly-attached event handlers.
+
++ `unify` takes an array of data and a function with signature
+(datum -> hiccup vector) and returns a product datatype that `render`
+and `merge` understand. `render` simply runs the mapping function
+across all of the data and explodes the result in place. Thus
+
+```clojure
+[:ol (unify (range 3) (fn [x] [:li x]))]
+```
+
+is, to `render`, the same as
+
+```clojure
+[:ol
+  [:li 0]
+  [:li 1]
+  [:li 2]]
+```
+
+In the case of `merge`, elements will be added, removed, or updated on
+the DOM according to a key function.
+This key function defaults to index, but can specified as an optional
+argument to `unify`, as can custom enter, update, and exit functions.
+See [C2](http://github.com/lynaghk/c2/) or [D3.js](http://d3js.org/)
+for more on this idea.
+
 
 Development / Testing
 ----------------------

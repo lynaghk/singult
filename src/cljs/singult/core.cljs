@@ -45,10 +45,12 @@
       sc/canonicalize
       sc/render))
 
-(defn merge! [$n v] (->> v
-                         clj->js
-                         sc/canonicalize
-                         (sc/merge $n)))
+(defn merge! [$n v]
+  (when-not (nil? v)
+    (->> v
+         clj->js
+         sc/canonicalize
+         (sc/merge $n))))
 
 
 (defn unify [data mapping & {:keys [key-fn enter update exit]

@@ -191,7 +191,6 @@ singult.coffee.unify_ = ($container, u) ->
 
   #exit old nodes
   for _, $n of nodes_by_key
-    p $n
     exit $n
 
   return null

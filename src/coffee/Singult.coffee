@@ -211,8 +211,11 @@ singult.coffee.merge = ($e, m) ->
     singult.coffee.attr $e, m.attr
 
     #Remove whitespace nodes from parent
-    for $c in $e.childNodes
-      $e.removeChild($c) if whitespace_node_p $c
+    if $e.hasChildNodes()
+      #Need to iterate from end because removing modifies the live collection
+      for i in [($e.childNodes.length-1)..0]
+        $c = $e.childNodes[i]
+        $e.removeChild($c) if whitespace_node_p $c
 
     if unify_p m.children[0] #the children are data driven; recurse to unify
       singult.coffee.merge $e, m.children[0]

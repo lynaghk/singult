@@ -44,7 +44,9 @@ array_p = (x) -> x? and x.forEach?
 map_p = (x) -> x? and (not array_p x) and (not unify_p x) and (x instanceof Object)
 string_p = (x) -> x? and x.substring?
 number_p = (x) -> x? and x.toFixed?
-whitespace_node_p = ($n) -> $n.nodeType == 3 and $n.textContent.match re_whitespace
+whitespace_node_p = ($n) ->
+  $n.nodeType == 8 or
+  ($n.nodeType == 3 and $n.textContent.match re_whitespace)
 
 
 

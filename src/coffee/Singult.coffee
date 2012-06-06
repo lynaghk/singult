@@ -60,10 +60,20 @@ singult.coffee.style = ($e, m) ->
   for own k, v of m
     $e.style[goog.string.toCamelCase(k)] = v
 
+singult.coffee.properties = ($e, m) ->
+  for own prop, v of m
+    $e[prop] = v
+
 singult.coffee.attr = ($e, attr_map) ->
-  if attr_map.style?
-    singult.coffee.style $e, attr_map.style
-    delete attr_map.style
+
+  #Special handling of style and properties keys
+  if attr_map["style"]?
+    singult.coffee.style $e, attr_map["style"]
+    delete attr_map["style"]
+
+  if attr_map["properties"]?
+    singult.coffee.properties $e, attr_map["properties"]
+    delete attr_map["properties"]
 
   for own k, v of attr_map
     if v?

@@ -1,5 +1,5 @@
 (ns integration.test
-  (:use [singult.core :only [merge! unify render]]))
+  (:use [singult.core :only [merge! attr unify render]]))
 
 ;;;;;;;;;;;;;;;;;
 ;;Testing helpers
@@ -84,6 +84,30 @@
 (assert (= "5" (.-innerText (aget (.-children $container) 0))))
 
 (clear! $test)
+
+
+
+
+
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Test checkbox properties
+(let [$check (render [:input {:type "checkbox"}])]
+  (append! $test $check)
+  (assert (not (.-checked $check)))
+  
+  (attr $check {:properties {:checked true}})
+  (assert (.-checked $check))
+  
+  (attr $check {:properties {:checked false}})
+  (assert (not (.-checked $check)))
+  
+  (attr $check {:properties {:checked nil}})
+  (assert (not (.-checked $check))))
 
 
 

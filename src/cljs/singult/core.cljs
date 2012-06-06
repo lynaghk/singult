@@ -5,8 +5,6 @@
 ;;Otherwise, passing around the raw JS object can cause some cljs ops to blow up.
 (defrecord Unify [data mapping key-fn enter update exit])
 
-(def node-data sc/node-data)
-
 (defn clj->js
   "Recursively transforms ClojureScript maps into Javascript objects,
    other ClojureScript colls into JavaScript arrays, and ClojureScript
@@ -37,7 +35,12 @@
                   a)
    :else x))
 
+(def node-data sc/node-data)
+(defn attr [$n m]
+  (sc/attr $n (clj->js m)))
 
+(defn style [$n m]
+  (sc/style $n (clj->js m)))
 
 (defn render [v]
   (-> v

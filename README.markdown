@@ -41,7 +41,7 @@ Install / Use
 Singult can be used from ClojureScript or JavaScript.
 For ClojureScript, just add
 
-    [com.keminglabs/singult "0.1.0-SNAPSHOT"]
+    [com.keminglabs/singult "0.1.0"]
 
 to your `project.clj`. If you are not using lein cljsbuild >= 0.2.1,
 you must add `:libs ["singult"]` to your ClojureScript compiler

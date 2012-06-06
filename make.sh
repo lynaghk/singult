@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-COFFEE_IN=src/coffee/
+COFFEE_IN=src/coffee/Singult.coffee
 PKG_OUT=pkg/closure-js/libs/singult #dir that'll be sucked into JAR
 JS_OUT=dev_public/js/
 

@@ -4,3 +4,5 @@ spec/javascripts/*.js
 .lein-cljsbuild*
 pkg/
 target/
+vendor/*jar
+singult.min.js

@@ -39,9 +39,6 @@
 (defn attr [$n m]
   (sc/attr $n (clj->js m)))
 
-(defn style [$n m]
-  (sc/style $n (clj->js m)))
-
 (defn render [v]
   (-> v
       clj->js

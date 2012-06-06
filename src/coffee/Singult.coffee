@@ -66,7 +66,10 @@ singult.coffee.attr = ($e, attr_map) ->
     delete attr_map.style
 
   for own k, v of attr_map
-    $e.setAttribute k, v
+    if v?
+      $e.setAttribute k, v
+    else
+      $e.removeAttribute k
 
 singult.coffee.node_data = ($e, d) ->
   if d?

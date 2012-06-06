@@ -100,10 +100,9 @@ PhantomJS must be installed to run tests:
 
     lein cljsbuild test
 
-will compile and run all tests.
-
-Minimal JS API test in `test/integration/js_api_test.html` 
-(just open it up in a browser).
+will compile and run all tests. Alternatively, open
+`public/index.html` in your favorite browser.
+Minimal JS API test in `test/integration/js_api_test.html`.
 
 Jasmine specs in `/spec` will be fleshed out more if our JavaScript
 friends start using the library.

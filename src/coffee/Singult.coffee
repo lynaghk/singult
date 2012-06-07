@@ -118,10 +118,11 @@ singult.coffee.canonicalize_hiccup = (v) ->
 
   canonical_children = []
   children.forEach (v) ->
-    if explode_p(v)
-      v[1..].forEach (v) -> canonical_children.push singult.coffee.canonicalize(v)
-    else
-      canonical_children.push singult.coffee.canonicalize(v)
+    if v?
+      if explode_p(v)
+        v[1..].forEach (v) -> canonical_children.push singult.coffee.canonicalize(v)
+      else
+        canonical_children.push singult.coffee.canonicalize(v)
 
   canonical =
     nsp: nsp

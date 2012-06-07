@@ -47,7 +47,9 @@
 
 ;;It should update atts and append children, if given an empty container
 (merge! $test [:div#test {:a "1" :b "grr"}
-               [:span "1"]])
+               [:span "1"]
+               nil ;;null children should be ignored
+               ])
 
 (assert (= "1" (.getAttribute $test "a")))
 (assert (= "grr" (.getAttribute $test "b")))

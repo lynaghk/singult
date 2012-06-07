@@ -166,7 +166,7 @@ singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit) ->
   @enter = enter
   @update = update
   @exit = exit
-
+  return this
 
 #Unifies $nodes with data and mapping contained in u.
 singult.coffee.unify_ = ($container, u) ->

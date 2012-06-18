@@ -83,9 +83,9 @@ singult.coffee.attr = ($e, attr_map) ->
 
 singult.coffee.node_data = ($e, d) ->
   if d?
-    $e.__c2_data__ = d
+    $e["__singult_data__"] = d
   else
-    $e.__c2_data__
+    $e["__singult_data__"]
 
 #########################
 # Hiccup vector reshaping

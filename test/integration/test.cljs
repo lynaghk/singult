@@ -1,5 +1,5 @@
 (ns integration.test
-  (:use [singult.core :only [merge! attr unify render]]))
+  (:use [singult.core :only [merge! attr unify render node-data]]))
 
 ;;;;;;;;;;;;;;;;;
 ;;Testing helpers
@@ -84,6 +84,9 @@
 
 (assert (= 15 (.-length (.-children $container))))
 (assert (= "5" (.-innerText (aget (.-children $container) 0))))
+
+(assert (= 5 (node-data (aget (.-children $container)
+                              0))))
 
 (clear! $test)
 

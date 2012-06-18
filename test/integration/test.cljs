@@ -78,7 +78,8 @@
 (def $container (render [:div (unify (range 5) (fn [d] [:p d]))]))
 (append! $test $container)
 (assert (= 5 (.-length (.-children $container))))
-
+(assert (= 0 (node-data (aget (.-children $container)
+                              0))))
 
 (merge! $container [:div (unify (range 5 20) (fn [d] [:p d]))])
 

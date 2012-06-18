@@ -143,9 +143,15 @@ singult.coffee.render = (m) ->
 
     if unify_p (c = m.children[0])
       if c.enter? #Use user-supplied enter fn.
-        c.data.forEach (d) -> $e.appendChild c.enter d
+        c.data.forEach (d) ->
+          $el = c.enter d
+          singult.coffee.node_data $el, d
+          $e.appendChild $el
       else #Construct a node from the mapping procided with the unify.
-        c.data.forEach (d) -> $e.appendChild singult.coffee.render singult.coffee.canonicalize c.mapping d
+        c.data.forEach (d) ->
+          $el = singult.coffee.render singult.coffee.canonicalize c.mapping d
+          singult.coffee.node_data $el, d
+          $e.appendChild $el
     else
       m.children.forEach ($c) -> $e.appendChild singult.coffee.render $c
     return $e

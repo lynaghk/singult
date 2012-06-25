@@ -33,13 +33,13 @@
 
 (let [$e (render [:div#with-id.and-class
                   [:span "and child"]])]
-  
+
   (assert (= "and child"
              (.-innerText (aget (.-children $e) 0)))))
 
 (let [$e (render [:svg])]
   (assert (= "http://www.w3.org/2000/svg"
-           (.-namespaceURI $e))))
+             (.-namespaceURI $e))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -88,6 +88,32 @@
 
 (assert (= 5 (node-data (aget (.-children $container)
                               0))))
+(clear! $test)
+
+
+;;Unify should only call mapping fn for new data
+(let [!counter (atom 0)
+      daytuh (range 5 20)
+      run! #(merge! $test
+                    [:div#test
+                     (unify %
+                            (fn [d]
+                              (swap! !counter inc)
+                              [:p d])
+                            :key-fn (fn [d idx] d))])]
+
+  (run! daytuh)
+  (assert (= (count daytuh) @!counter)
+          "Mapping fn should be called for each new data")
+
+  (reset! !counter 0)
+  (run! daytuh)
+  (assert (= 0 @!counter)
+          "Mapping fn shouldn't be called on unchanged data")
+
+  (run! (conj daytuh 1))
+  (assert (= 1 @!counter)
+          "Mapping fn should only be called for new data"))
 
 (clear! $test)
 
@@ -105,13 +131,13 @@
 (let [$check (render [:input {:type "checkbox"}])]
   (append! $test $check)
   (assert (not (.-checked $check)))
-  
+
   (attr $check {:properties {:checked true}})
   (assert (.-checked $check))
-  
+
   (attr $check {:properties {:checked false}})
   (assert (not (.-checked $check)))
-  
+
   (attr $check {:properties {:checked nil}})
   (assert (not (.-checked $check))))
 

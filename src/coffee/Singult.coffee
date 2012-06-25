@@ -197,10 +197,18 @@ singult.coffee.unify_ = ($container, u) ->
   u.data.forEach (d, i) ->
     key = key_prefix + key_fn d, i
     if $n = nodes_by_key[key]
-      #TODO: only update if new data is different than old data.
-      # Can't check with == because JavaScript doesn't have deep by-value identity semantics.
-      $el = update $n, d
-      singult.coffee.node_data $el, d
+      old_data = singult.coffee.node_data $n
+
+      identical_data_p = if old_data.cljs$core$IEquiv$_equiv$arity$2?
+        old_data.cljs$core$IEquiv$_equiv$arity$2(old_data, d)
+      else
+        old_data == d
+
+      #Update only if the data is new.
+      unless identical_data_p
+        $el = update $n, d
+        singult.coffee.node_data $el, d
+
       #Remove node from list; after this loop all remaining nodes will be passed to exit.
       delete nodes_by_key[key]
     else

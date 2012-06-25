@@ -165,13 +165,14 @@ singult.coffee.render = (m) ->
 `/**
  * @constructor
  */`
-singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit) ->
+singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, force_update_p) ->
   @data = data
   @mapping = mapping
   @key_fn = key_fn
   @enter = enter
   @update = update
   @exit = exit
+  @force_update_p = force_update_p
   return this
 
 #Unifies $nodes with data and mapping contained in u.
@@ -197,17 +198,20 @@ singult.coffee.unify_ = ($container, u) ->
   u.data.forEach (d, i) ->
     key = key_prefix + key_fn d, i
     if $n = nodes_by_key[key]
-      old_data = singult.coffee.node_data $n
-
-      identical_data_p = if old_data.cljs$core$IEquiv$_equiv$arity$2?
-        old_data.cljs$core$IEquiv$_equiv$arity$2(old_data, d)
-      else
-        old_data == d
-
-      #Update only if the data is new.
-      unless identical_data_p
+      if u.force_update_p
         $el = update $n, d
         singult.coffee.node_data $el, d
+      else #only update if the data is new
+        old_data = singult.coffee.node_data $n
+
+        identical_data_p = if old_data.cljs$core$IEquiv$_equiv$arity$2?
+          old_data.cljs$core$IEquiv$_equiv$arity$2(old_data, d)
+        else
+          old_data == d
+
+        unless identical_data_p
+          $el = update $n, d
+          singult.coffee.node_data $el, d
 
       #Remove node from list; after this loop all remaining nodes will be passed to exit.
       delete nodes_by_key[key]

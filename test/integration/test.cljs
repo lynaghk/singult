@@ -96,24 +96,32 @@
       daytuh (range 5 20)
       run! #(merge! $test
                     [:div#test
-                     (unify %
+                     (unify %1
                             (fn [d]
                               (swap! !counter inc)
                               [:p d])
-                            :key-fn (fn [d idx] d))])]
+                            :key-fn (fn [d idx] d)
+                            :force-update? %2)])]
 
-  (run! daytuh)
+  (run! daytuh false)
   (assert (= (count daytuh) @!counter)
           "Mapping fn should be called for each new data")
 
   (reset! !counter 0)
-  (run! daytuh)
+  (run! daytuh false)
   (assert (= 0 @!counter)
           "Mapping fn shouldn't be called on unchanged data")
 
-  (run! (conj daytuh 1))
+  (reset! !counter 0)
+  (run! (conj daytuh 1) false)
   (assert (= 1 @!counter)
-          "Mapping fn should only be called for new data"))
+          "Mapping fn should only be called for new data")
+
+  (reset! !counter 0)
+  (run! daytuh true)
+  (assert (= (count daytuh) @!counter)
+          "Mapping fn should run on all data if :force-update? kwarg is true"))
+
 
 (clear! $test)
 

@@ -3,7 +3,7 @@
 
 ;;Need a ClojureScript "boxed" Unify struct that implements IHash.
 ;;Otherwise, passing around the raw JS object can cause some cljs ops to blow up.
-(defrecord Unify [data mapping key-fn enter update exit])
+(defrecord Unify [data mapping key-fn enter update exit force-update?])
 
 (defn clj->js
   "Recursively transforms ClojureScript maps into Javascript objects,
@@ -11,7 +11,7 @@
    keywords into JavaScript strings."
   [x]
   (cond
-   (instance? Unify x) (let [{:keys [data mapping key-fn enter update exit]} x
+   (instance? Unify x) (let [{:keys [data mapping key-fn enter update exit force-update?]} x
                              ;;Convert the data seq to JS array, but not the items---the user-supplied mapping expects clj data.
                              data-arr (let [a (array)]
                                         (doseq [d data]
@@ -19,7 +19,8 @@
                                         a)]
                          (sc/Unify. data-arr
                                     #(clj->js (mapping %))
-                                    key-fn enter update exit))
+                                    key-fn enter update exit
+                                    force-update?))
 
    (keyword? x) (name x)
    (map? x)     (let [o (js-obj)]
@@ -53,5 +54,6 @@
          (sc/merge $n))))
 
 
-(defn unify [data mapping & {:keys [key-fn enter update exit]}]
-  (Unify. data mapping key-fn enter update exit))
+(defn unify [data mapping & {:keys [key-fn enter update exit
+                                    force-update?]}]
+  (Unify. data mapping key-fn enter update exit force-update?))

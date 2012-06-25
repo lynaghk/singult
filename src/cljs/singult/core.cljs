@@ -53,7 +53,5 @@
          (sc/merge $n))))
 
 
-(defn unify [data mapping & {:keys [key-fn enter update exit]
-                             :or {key-fn (fn [d idx] idx)}}]
-
+(defn unify [data mapping & {:keys [key-fn enter update exit]}]
   (Unify. data mapping key-fn enter update exit))

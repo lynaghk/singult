@@ -183,18 +183,19 @@ singult.coffee.unify_ = ($container, u) ->
   update = u.update or ($n, d) ->
     return singult.coffee.merge $n, singult.coffee.canonicalize u.mapping d
   exit = u.exit or ($n) -> $container.removeChild $n
+  key_fn = u.key_fn or (d, idx) -> idx
 
   $nodes = $container.childNodes
   nodes_by_key = {}
   i = 0
   while i < $nodes.length
-    key = key_prefix + u.key_fn singult.coffee.node_data($nodes[i]), i
+    key = key_prefix + key_fn singult.coffee.node_data($nodes[i]), i
     nodes_by_key[key] = $nodes[i]
     i += 1
 
   #update/enter new nodes
   u.data.forEach (d, i) ->
-    key = key_prefix + u.key_fn d, i
+    key = key_prefix + key_fn d, i
     if $n = nodes_by_key[key]
       #TODO: only update if new data is different than old data.
       # Can't check with == because JavaScript doesn't have deep by-value identity semantics.

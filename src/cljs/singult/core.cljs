@@ -30,6 +30,13 @@
                         (throw "Cannot convert; JavaScript map keys must be strings"))
                       (aset o key (clj->js v))))
                   o)
+   
+   (seq? x)     (let [a (array)]
+                  (.push a ":*:")
+                  (doseq [item x]
+                    (.push a (clj->js item)))
+                  a)
+   
    (coll? x)    (let [a (array)]
                   (doseq [item x]
                     (.push a (clj->js item)))

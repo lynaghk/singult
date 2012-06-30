@@ -41,6 +41,12 @@
   (assert (= "http://www.w3.org/2000/svg"
              (.-namespaceURI $e))))
 
+;;Seqs should be exploded in place
+(let [$e (render [:div (map (fn [x] [:span x])
+                            (range 3))])]
+  (assert (= "1"
+             (.-innerText (aget (.-children $e) 1)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Test merge!

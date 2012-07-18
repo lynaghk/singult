@@ -249,7 +249,9 @@ singult.coffee.merge = ($e, m) ->
       singult.coffee.merge $e, m.children[0]
     else #the children are not data-driven; merge, assuming they match up by type & index
       if $e.childNodes.length > m.children.length
-        throw "Removing DOM nodes in singult.core#merge! not yet implemented = ("
+        # Remove all existing node children (TODO: try to match things up instead of rebuilding everything?)
+        for i in [($e.childNodes.length-1)..0]
+          $e.removeChild $e.childNodes[i]
 
       i = 0
       while i < m.children.length

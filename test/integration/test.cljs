@@ -23,7 +23,6 @@
 
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Test rendering
 (let [$e (render [:div#with-id.and-class])]
@@ -71,6 +70,10 @@
 (assert (= "SPAN" (.-tagName (aget (.-children $test) 0))))
 (assert (= "1" (.getAttribute (aget (.-children $test) 0) "b")))
 (assert (= "P" (.-tagName (aget (.-children $test) 1))))
+
+;;Merging should clear children
+(merge! $test [:div#test])
+(assert (= 0 (.-length (.-children $test))))
 
 
 (clear! $test)

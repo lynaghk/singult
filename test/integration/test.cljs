@@ -36,8 +36,13 @@
   (assert (= "and child"
              (.-innerText (aget (.-children $e) 0)))))
 
-(let [$e (render [:svg])]
-  (assert (= "http://www.w3.org/2000/svg"
+(doseq [tag [:svg :g]]
+  (let [$e (render [tag])]
+    (assert (= "http://www.w3.org/2000/svg"
+               (.-namespaceURI $e)))))
+
+(let [$e (render [:img])]
+  (assert (= "http://www.w3.org/1999/xhtml"
              (.-namespaceURI $e))))
 
 ;;Seqs should be exploded in place

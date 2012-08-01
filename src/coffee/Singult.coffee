@@ -16,7 +16,7 @@ p = (x) ->
   x
 
 re_tag = /([^\s\.#]+)(?:#([^\s\.#]+))?(?:\.([^\s#]+))?/
-re_svg_tags = /(svg|g|rect|circle|clipPath|path|line|polygon|polyline|text|textPath)/
+re_svg_tags = /^(svg|g|rect|circle|clipPath|path|line|polygon|polyline|text|textPath)$/
 re_whitespace = /^\s+$/
 
 #Prefix for key-fns so there aren't problems when people use numbers as keys.

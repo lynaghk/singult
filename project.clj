@@ -1,4 +1,4 @@
-(defproject com.keminglabs/singult "0.1.3"
+(defproject com.keminglabs/singult "0.1.4-SNAPSHOT"
   :description "JavaScript Hiccup compiler"
   :license {:name "BSD" :url "http://www.opensource.org/licenses/BSD-3-Clause"}
   
@@ -6,7 +6,7 @@
   
   :min-lein-version "2.0.0"
 
-  :plugins [[lein-cljsbuild "0.2.2"]]
+  :plugins [[lein-cljsbuild "0.2.4"]]
 
   :source-paths ["src/clj" "src/cljs"]
   

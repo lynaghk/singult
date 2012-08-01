@@ -6,9 +6,11 @@ svgns = "http://www.w3.org/2000/svg"
 describe "namespace_tag", ->
   it "should default to xhtml namespace", ->
     expect(namespace_tag("div")).toEqual [xhtmlns, "div"]
+    expect(namespace_tag("img")).toEqual [xhtmlns, "img"]
 
   it "should infer svg namespace", ->
     expect(namespace_tag("circle")).toEqual [svgns, "circle"]
+    expect(namespace_tag("g")).toEqual [svgns, "g"]
 
 describe "canonicalize", ->
   it "should canonicalize with attr", ->

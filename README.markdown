@@ -1,4 +1,3 @@
-
        _____  _                       __ __ 
       / ___/ (_)____   ____ _ __  __ / // /_
       \__ \ / // __ \ / __ `// / / // // __/
@@ -53,7 +52,7 @@ Singult provides some functions and a datatype.
 + `render` takes a hiccup array (described above) and returns a live
 DOM node.
 
-+ `merge` takes a live DOM node and a hiccup array, and projects the
++ `merge!` takes a live DOM node and a hiccup array, and projects the
 latter onto the former. That is, the live node (and its children, if
 any) will be given the attributes and inline styles of the node(s)
 described by the hiccup vector. Merging is useful compared to removing

@@ -20,14 +20,22 @@
 
 (def $body (select "body"))
 (def $test (append! $body (render [:div#test])))
-
-
+(defn has-class [$e class]
+  (re-seq (re-pattern (str "(^|\\s)" class "($|\\s)"))
+          (.-className $e)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Test rendering
 (let [$e (render [:div#with-id.and-class])]
   (assert (= "with-id" (.-id $e)))
-  (assert (= "and-class" (.-className $e))))
+  (assert (has-class $e "and-class")))
+
+
+(let [$e (render [:div#with-id.and.multiple.classes])]
+  (assert (= "with-id" (.-id $e)))
+  (assert (has-class $e "and"))
+  (assert (has-class $e "multiple"))
+  (assert (has-class $e "classes")))
 
 
 (let [$e (render [:div#with-id.and-class

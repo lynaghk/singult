@@ -111,7 +111,7 @@ singult.coffee.canonicalize_hiccup = (v) ->
   if id?
     attr["id"] = id
   if cls_str?
-    attr["class"] = cls_str.replace(".", " ") + (if attr["class"]? then " " + attr["class"] else "")
+    attr["class"] = cls_str.replace(/\./g, " ") + (if attr["class"]? then " " + attr["class"] else "")
 
   #Determine namespace from tag
   [nsp, tag] = namespace_tag tag_str

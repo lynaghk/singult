@@ -165,13 +165,14 @@ singult.coffee.render = (m) ->
 `/**
  * @constructor
  */`
-singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, force_update_p) ->
+singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, selector, force_update_p) ->
   @data = data
   @mapping = mapping
   @key_fn = key_fn
   @enter = enter
   @update = update
   @exit = exit
+  @selector = selector
   @force_update_p = force_update_p
   return this
 
@@ -186,7 +187,7 @@ singult.coffee.unify_ = ($container, u) ->
   exit = u.exit or ($n) -> $container.removeChild $n
   key_fn = u.key_fn or (d, idx) -> idx
 
-  $nodes = $container.childNodes
+  $nodes = if u.selector? then $container.querySelectorAll(u.selector) else $container.childNodes
   nodes_by_key = {}
   i = 0
   while i < $nodes.length

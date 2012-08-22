@@ -149,27 +149,6 @@
 
 
 
-;;Unify takes an optional CSS selector for nodes to act on; otherwise defaults to all children.
-(merge! $test
-        [:div#test
-         (unify (range 5) (fn [d] [:p.foo d]))])
-(assert (= 5 (.-length (.-children $test))))
-(merge! $test
-        [:div#test
-         (unify (range 5) (fn [d] [:p.bar d])
-                :selector ".bar")])
-
-(assert (= 10 (.-length (.-children $test))))
-
-(merge! $test
-        [:div#test
-         (unify [] (fn [d] [:p.bar d])
-                :selector ".foo")])
-
-(assert (= 5 (.-length (.-children $test))))
-(assert (has-class (aget (.-children $test) 0) "bar"))
-
-(clear! $test)
 
 
 

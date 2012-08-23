@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+0.1.4
+-----
++ Throw informative exception when unify is misused.
++ Fixed bug where elements couldn't have more than two classes specified with dot shorthand.
++ Bugfix for img tag namespace (thanks Bobby Calderwood!)
+
 0.1.3
 -----
 + Merging hiccup into a live DOM node with more children than the

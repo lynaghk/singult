@@ -6,7 +6,7 @@
   
   :min-lein-version "2.0.0"
 
-  :plugins [[lein-cljsbuild "0.2.4"]]
+  :plugins [[lein-cljsbuild "0.2.5"]]
 
   :source-paths ["src/clj" "src/cljs"]
   
@@ -16,7 +16,7 @@
               {:test {:source-path "test"
                       :compiler {:output-to "public/cljs_test.js"
                                  :libs ["dev_public/js/Singult.js"]
-                                 :optimizations :advanced}
+                                 :optimizations :advanced :pretty-print false}
                       :jar false}}
               
               :test-commands {"integration" ["phantomjs"

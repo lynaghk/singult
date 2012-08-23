@@ -135,7 +135,9 @@ singult.coffee.canonicalize_hiccup = (v) ->
 
 #Build and return DOM element (and any children) represented by canonical hiccup map m.
 singult.coffee.render = (m) ->
-  if string_p m #TODO: how to handle raw html?
+  if unify_p m
+    throw new Error("Unify must be the first and only child of its parent.")
+  else if string_p m #TODO: how to handle raw html?
     return document.createTextNode m
   else #it's a canonical map
     $e = document.createElementNS m.nsp, m.tag

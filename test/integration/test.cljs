@@ -147,6 +147,15 @@
 
 (clear! $test)
 
+;;Nice exception message when people mix unify in with other elements
+(let [!msg (atom "")]
+  (try
+    (render [:div [:p 1] (unify [] (fn []))])
+    (catch js/Error e
+      (reset! !msg (.-message e))))
+
+  (assert (= "Unify must be the first and only child of its parent."
+             @!msg)))
 
 
 

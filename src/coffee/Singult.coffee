@@ -6,6 +6,7 @@
 goog.require("goog.string")
 goog.provide("singult.coffee")
 goog.provide("singult.coffee.Unify")
+goog.provide("singult.coffee.Ignore")
 
 ############
 # Helper fns
@@ -40,8 +41,9 @@ namespace_tag = (tag_str) ->
 
 explode_p = (v) -> v[0] == ":*:"
 unify_p = (x) -> x? and (x instanceof singult.coffee.Unify)
+ignore_p = (x) -> x? and (x instanceof singult.coffee.Ignore)
 array_p = (x) -> x? and x.forEach?
-map_p = (x) -> x? and (not array_p x) and (not unify_p x) and (x instanceof Object)
+map_p = (x) -> x? and (not array_p x) and (not unify_p x) and (not ignore_p x) and (x instanceof Object)
 string_p = (x) -> x? and x.substring?
 number_p = (x) -> x? and x.toFixed?
 whitespace_node_p = ($n) ->
@@ -137,6 +139,8 @@ singult.coffee.canonicalize_hiccup = (v) ->
 singult.coffee.render = (m) ->
   if unify_p m
     throw new Error("Unify must be the first and only child of its parent.")
+  else if ignore_p m
+    return null
   else if string_p m #TODO: how to handle raw html?
     return document.createTextNode m
   else #it's a canonical map
@@ -155,7 +159,10 @@ singult.coffee.render = (m) ->
           singult.coffee.node_data $el, d
           $e.appendChild $el
     else
-      m.children.forEach ($c) -> $e.appendChild singult.coffee.render $c
+      m.children.forEach (c) ->
+        $c = singult.coffee.render c
+        if $c?
+          $e.appendChild $c
     return $e
 
 
@@ -176,6 +183,11 @@ singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, force_update
   @exit = exit
   @force_update_p = force_update_p
   return this
+
+`/**
+ * @constructor
+ */`
+singult.coffee.Ignore = -> return this
 
 #Unifies $nodes with data and mapping contained in u.
 singult.coffee.unify_ = ($container, u) ->
@@ -231,11 +243,13 @@ singult.coffee.unify_ = ($container, u) ->
 singult.coffee.merge = ($e, m) ->
   if unify_p m
     singult.coffee.unify_ $e, m
+  else if ignore_p m
+    #do nothing
   else
     if $e.nodeName.toLowerCase() != m.tag.toLowerCase()
       p $e
       p m
-      throw "Cannot merge $e into node of different type"
+      throw new Error("Cannot merge $e into node of different type")
 
     #Merge attributes
     singult.coffee.attr $e, m.attr
@@ -260,13 +274,14 @@ singult.coffee.merge = ($e, m) ->
         c = m.children[i] or ""
         $c = $e.childNodes[i]
 
-        if string_p(c)
+        if string_p c
           if $c?
             $c.textContent = c
           else
             $e.appendChild document.createTextNode c
-
-        else if map_p(c)
+        else if ignore_p c
+          #do nothing
+        else if map_p c
           if $c?
             singult.coffee.merge $c, c
           else
@@ -275,7 +290,7 @@ singult.coffee.merge = ($e, m) ->
         else
           p $c
           p c
-          throw "Cannot merge children"
+          throw new Error("Cannot merge children")
         i += 1
   #Return element
   return $e

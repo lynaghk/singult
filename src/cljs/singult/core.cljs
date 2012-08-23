@@ -21,8 +21,9 @@
                                     #(clj->js (mapping %))
                                     key-fn enter update exit
                                     force-update?))
-
+   
    (keyword? x) (name x)
+   
    (map? x)     (let [o (js-obj)]
                   (doseq [[k v] x]
                     (let [key (clj->js k)]
@@ -64,3 +65,5 @@
 (defn unify [data mapping & {:keys [key-fn enter update exit
                                     force-update?]}]
   (Unify. data mapping key-fn enter update exit force-update?))
+
+(defn ignore [] (sc/Ignore.))

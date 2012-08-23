@@ -1,5 +1,5 @@
 (ns integration.test
-  (:use [singult.core :only [merge! attr unify render node-data]]))
+  (:use [singult.core :only [merge! attr unify ignore render node-data]]))
 
 ;;;;;;;;;;;;;;;;;
 ;;Testing helpers
@@ -59,6 +59,10 @@
   (assert (= "1"
              (.-innerText (aget (.-children $e) 1)))))
 
+;;Ignores should be, um, ignored.
+(let [$e (render [:div (ignore)])]
+  (assert (= 0 (.-length (.-children $e)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;Test merge!
@@ -88,7 +92,16 @@
 (merge! $test [:div#test])
 (assert (= 0 (.-length (.-children $test))))
 
-
+;;Merging an ignore should skip the child in that position
+(merge! $test [:div#test
+               [:span "abc"]])
+(assert (= 1 (.-length (.-children $test))))
+(merge! $test [:div#test
+               (ignore)
+               [:span "def"]])
+(assert (= 2 (.-length (.-children $test))))
+(assert (= "abc" (.-innerText (aget (.-children $test) 0))))
+(assert (= "def" (.-innerText (aget (.-children $test) 1))))
 (clear! $test)
 
 

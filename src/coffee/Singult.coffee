@@ -68,7 +68,7 @@ singult.coffee.properties = ($e, m) ->
 
 singult.coffee.attr = ($e, attr_map) ->
 
-  #Special handling of style and properties keys
+  #Special handling of style, properties, and class keys
   if attr_map["style"]?
     singult.coffee.style $e, attr_map["style"]
     delete attr_map["style"]
@@ -76,6 +76,10 @@ singult.coffee.attr = ($e, attr_map) ->
   if attr_map["properties"]?
     singult.coffee.properties $e, attr_map["properties"]
     delete attr_map["properties"]
+
+  if array_p attr_map["class"]
+    $e.setAttribute "class", attr_map["class"].join(" ")
+    delete attr_map["class"]
 
   for own k, v of attr_map
     if v?
@@ -113,7 +117,13 @@ singult.coffee.canonicalize_hiccup = (v) ->
   if id?
     attr["id"] = id
   if cls_str?
-    attr["class"] = cls_str.replace(/\./g, " ") + (if attr["class"]? then " " + attr["class"] else "")
+    abbreviated_classes = cls_str.split(".")
+    if array_p attr["class"]
+      attr["class"] = attr["class"].concat abbreviated_classes
+    else if string_p attr["class"]
+      attr["class"] = abbreviated_classes.concat [attr["class"]]
+    else if not attr["class"]?
+      attr["class"] = abbreviated_classes
 
   #Determine namespace from tag
   [nsp, tag] = namespace_tag tag_str

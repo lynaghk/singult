@@ -1,4 +1,5 @@
 (ns singult.core
+  (:refer-clojure :exclude [clj->js])
   (:require [singult.coffee :as sc]))
 
 ;;Need a ClojureScript "boxed" Unify struct that implements IHash.

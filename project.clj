@@ -1,4 +1,4 @@
-(defproject com.keminglabs/singult "0.1.5"
+(defproject com.keminglabs/singult "0.1.6-SNAPSHOT"
   :description "JavaScript Hiccup compiler"
   :license {:name "BSD" :url "http://www.opensource.org/licenses/BSD-3-Clause"}
   

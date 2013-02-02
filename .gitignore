@@ -6,3 +6,5 @@ pkg/
 target/
 vendor/*jar
 singult.min.js
+node_modules
+pom.xml

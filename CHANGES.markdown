@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+0.1.5
+-----
++ Add special "ignore" datatype
++ Class attributes can be specified as a seqable
+
 0.1.4
 -----
 + Throw informative exception when unify is misused.

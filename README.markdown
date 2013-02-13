@@ -65,10 +65,11 @@ values. The keywords `:style` and `:properties` should be given
 another map, the keys and values of which will be used to set the
 styles and node properties. E.g.,
 
-    (attr $my-checkbox {:id "Foo"
-                        :style {:background-color "red"}
-                        :properties {:checked true}})
-
+```clojure
+(attr $my-checkbox {:id "Foo"
+                    :style {:background-color "red"}
+                    :properties {:checked true}})
+```
 
 + `unify` takes an array of data and a function with signature
 (datum -> hiccup vector) and returns a product datatype that `render`

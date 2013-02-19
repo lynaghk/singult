@@ -3,7 +3,8 @@ goog.require("singult.coffee")
 #################################
 #Export an API for our JS friends
 #################################
-window["singult"] = {}
+if not window["singult"]? # we want to preserve the singult in whitespace & simple mode
+  window["singult"] = {}
 window["singult"]["attr"] = singult.coffee.attr
 window["singult"]["node_data"] = singult.coffee.node_data
 

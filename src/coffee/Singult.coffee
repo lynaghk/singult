@@ -44,6 +44,7 @@ unify_p = (x) -> x? and (x instanceof singult.coffee.Unify)
 ignore_p = (x) -> x? and (x instanceof singult.coffee.Ignore)
 array_p = (x) -> x? and x.forEach?
 map_p = (x) -> x? and (not array_p x) and (not unify_p x) and (not ignore_p x) and (x instanceof Object)
+dom_p = (x) -> x? and x.nodeType?
 string_p = (x) -> x? and x.substring?
 number_p = (x) -> x? and x.toFixed?
 whitespace_node_p = ($n) ->
@@ -153,6 +154,8 @@ singult.coffee.render = (m) ->
     return null
   else if string_p m #TODO: how to handle raw html?
     return document.createTextNode m
+  else if dom_p m
+    return m
   else #it's a canonical map
     $e = document.createElementNS m.nsp, m.tag
     singult.coffee.attr $e, m.attr

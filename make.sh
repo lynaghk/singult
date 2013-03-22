@@ -10,7 +10,7 @@ rm -rf $JS_OUT $PKG_OUT
 mkdir -p $JS_OUT
 
 #Compile CoffeeScript
-coffee                            \
+./node_modules/.bin/coffee        \
     --compile                     \
     --bare                        \
     --output $JS_OUT $COFFEE_IN

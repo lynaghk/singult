@@ -194,5 +194,16 @@
   (assert (not (.-checked $check))))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;attr namespace
+(let [$svg (render [:svg])]
+  (append! $test $svg)
+  (attr $svg {:xmlns:xlink "http://www.w3.org/1999/xlink"})
+  (assert (= "http://www.w3.org/2000/xmlns"
+             (-> (.-attributes $svg)
+                 (aget 0)
+                 (.-namespaceURI)))))
+
+
 
 (p "All tests passed, hurray!")

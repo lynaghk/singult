@@ -19,13 +19,17 @@ p = (x) ->
 re_tag = /([^\s\.#]+)(?:#([^\s\.#]+))?(?:\.([^\s#]+))?/
 re_svg_tags = /^(svg|g|rect|circle|clipPath|path|line|polygon|polyline|text|textPath)$/
 re_whitespace = /^\s+$/
-
+#Namespace separator colon should be greedy so it only splits the first colon.
+re_namespace_sep = /:(.+)/
 #Prefix for key-fns so there aren't problems when people use numbers as keys.
 key_prefix = "\0"
 
 xmlns =
   xhtml: "http://www.w3.org/1999/xhtml"
+  xlink: "http://www.w3.org/1999/xlink"
   svg: "http://www.w3.org/2000/svg"
+  xml: "http://www.w3.org/XML/1998/namespace"
+  xmlns: "http://www.w3.org/2000/xmlns"
 
 #Determines namespace URI from tag string, defaulting to xhtml. Returns [nsp tag]
 namespace_tag = (tag_str) ->
@@ -84,7 +88,11 @@ singult.coffee.attr = ($e, attr_map) ->
 
   for own k, v of attr_map
     if v?
-      $e.setAttribute k, v
+      [ns, attr] = k.split re_namespace_sep
+      if attr?
+        $e.setAttributeNS (xmlns[ns] or ns), attr, v
+      else
+        $e.setAttribute k, v
     else
       $e.removeAttribute k
 

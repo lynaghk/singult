@@ -126,6 +126,57 @@
 (clear! $test)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;Test merge preserves order
+
+(defn original
+  ([x] (.-original x))
+  ([x data] (set! (.-original x) data)))
+
+(extend-type js/NodeList
+  ISeqable
+  (-seq [array] (array-seq array 0)))
+(extend-type js/HTMLCollection
+  ISeqable
+  (-seq [array] (array-seq array 0)))
+
+(defn test-merge [from to tests name]
+    (letfn [
+             (orig? [$n]
+               (and (original $n) (= (original $n) (node-data $n))))
+
+             (new? [$n]
+               (not (orig? $n)))
+
+             (->unify [data]
+               [:div (unify data (fn [x] [:p x]) :key-fn identity)])
+             ]
+      (let [testfns (map #(if (= :o %) orig? new?) tests)
+            $e (render (->unify from))
+            cs #(.-children $e)]
+
+        ; tag nodes with original value
+        (dorun (map original (cs) from))
+        ; apply merge!
+        (merge! $e (->unify to))
+
+      (assert (= (count to) (count (cs))))
+      (dorun (map #(assert (= %1 (node-data %2))) to (cs)))
+      (dorun (map #(assert (%1 %2)) testfns (cs)))
+      )))
+
+(test-merge [2 3] [1 2 3] [:n :o :o ] "add first")
+(test-merge [1 3] [1 2 3] [:o :n :o ] "add middle")
+(test-merge [2 3] [2 3 4] [:o :o :n ] "add last")
+(test-merge [1 2 3] [2 3] [:o :o ] "remove first")
+(test-merge [1 2 3] [1 3] [:o :o ] "remove middle")
+(test-merge [1 2 3] [1 2] [:o :o ] "remove last")
+(test-merge [1 2 3] [1 4 3] [:o :n :o ] "swap middle")
+(test-merge [2 4 5] [1 2 3 5] [:n :o :n :o ] "add first, remove middle, add middle")
+(test-merge [1 2 3] [1 3 2] [:o :o :o ] "reorder")
+
+
+
 ;;Unify should only call mapping fn for new data
 (let [!counter (atom 0)
       daytuh (range 5 20)

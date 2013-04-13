@@ -222,41 +222,78 @@ singult.coffee.unify_ = ($container, u) ->
   key_fn = u.key_fn or (d, idx) -> idx
 
   $nodes = $container.childNodes
-  nodes_by_key = {}
-  i = 0
-  while i < $nodes.length
-    key = key_prefix + key_fn singult.coffee.node_data($nodes[i]), i
-    nodes_by_key[key] = $nodes[i]
-    i += 1
 
-  #update/enter new nodes
-  u.data.forEach (d, i) ->
-    key = key_prefix + key_fn d, i
-    if $n = nodes_by_key[key]
-      if u.force_update_p
+  data_to_key = (d, i) ->
+    return key_prefix + key_fn d, i
+
+  node_to_key = ($n, i) ->
+    return data_to_key singult.coffee.node_data($n), i
+
+  maybe_do_update = ($n, d) ->
+    if u.force_update_p
+      $el = update $n, d
+      singult.coffee.node_data $el, d
+    else #only update if the data is new
+      old_data = singult.coffee.node_data $n
+
+      identical_data_p = if old_data.cljs$core$IEquiv$_equiv$arity$2?
+        old_data.cljs$core$IEquiv$_equiv$arity$2(old_data, d)
+      else
+        old_data == d
+
+      unless identical_data_p
         $el = update $n, d
         singult.coffee.node_data $el, d
-      else #only update if the data is new
-        old_data = singult.coffee.node_data $n
 
-        identical_data_p = if old_data.cljs$core$IEquiv$_equiv$arity$2?
-          old_data.cljs$core$IEquiv$_equiv$arity$2(old_data, d)
-        else
-          old_data == d
-
-        unless identical_data_p
-          $el = update $n, d
-          singult.coffee.node_data $el, d
-
-      #Remove node from list; after this loop all remaining nodes will be passed to exit.
-      delete nodes_by_key[key]
+  insert_at = ($n, i) ->
+    if i < $nodes.length
+      $container.insertBefore($n, $nodes[i])
     else
+      $container.appendChild($n)
+
+  data_map = {}
+  u.data.forEach (d, i) ->
+    key = data_to_key d, i
+    data_map[key] = d
+
+  #extract nodes-to-keep
+  nodes_to_keep = {}
+  i = 0
+  while i < $nodes.length
+    key = node_to_key $nodes[i], i
+    if data_map[key]
+      nodes_to_keep[key] = $nodes[i]
+    i += 1
+
+  #iterate: d,i in u.data, for each d,i:
+  u.data.forEach (d, i) ->
+    # after each step of the forEach, the element at $nodes[i] is
+    # matches the input data of d.
+    $n = if i < $nodes.length then $nodes[i]
+    n_key = if $n then node_to_key $n, i
+    d_key = data_to_key d, i
+    if !$n?
       $el = enter d
       singult.coffee.node_data $el, d
+    else if n_key == d_key
+      maybe_do_update $nodes[i], d
+    else
+      if !nodes_to_keep[n_key]
+        exit $n
 
-  #exit old nodes
-  for _, $n of nodes_by_key
-    exit $n
+      if nodes_to_keep[d_key]
+        $el = nodes_to_keep[d_key]
+        insert_at $el, i
+        maybe_do_update $el, d
+      else
+        $el = enter d
+        insert_at $el, i
+        singult.coffee.node_data $el, d
+
+  # if we've run out of d, kill everything else
+  data_len = u.data.length
+  while data_len < $nodes.length
+    exit $nodes[data_len]
 
   return null
 

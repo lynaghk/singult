@@ -213,12 +213,10 @@ singult.coffee.Ignore = -> return this
 #Unifies $nodes with data and mapping contained in u.
 singult.coffee.unify_ = ($container, u) ->
   enter = u.enter or (d) ->
-    $el = singult.coffee.render singult.coffee.canonicalize u.mapping d
-    $container.appendChild $el
-    return $el
+    return singult.coffee.render singult.coffee.canonicalize u.mapping d
   update = u.update or ($n, d) ->
     return singult.coffee.merge $n, singult.coffee.canonicalize u.mapping d
-  exit = u.exit or ($n) -> $container.removeChild $n
+  exit = u.exit
   key_fn = u.key_fn or (d, idx) -> idx
 
   $nodes = $container.childNodes
@@ -267,19 +265,22 @@ singult.coffee.unify_ = ($container, u) ->
 
   #iterate: d,i in u.data, for each d,i:
   u.data.forEach (d, i) ->
-    # after each step of the forEach, the element at $nodes[i] is
+    # after each step of the forEach, the element at $nodes[i]
     # matches the input data of d.
     $n = if i < $nodes.length then $nodes[i]
     n_key = if $n then node_to_key $n, i
     d_key = data_to_key d, i
     if !$n?
       $el = enter d
+      $container.appendChild $el
       singult.coffee.node_data $el, d
     else if n_key == d_key
       maybe_do_update $nodes[i], d
     else
       if !nodes_to_keep[n_key]
-        exit $n
+        if exit?
+          exit $n, singult.coffee.node_data
+        $container.removeChild $n
 
       if nodes_to_keep[d_key]
         $el = nodes_to_keep[d_key]
@@ -293,7 +294,10 @@ singult.coffee.unify_ = ($container, u) ->
   # if we've run out of d, kill everything else
   data_len = u.data.length
   while data_len < $nodes.length
-    exit $nodes[data_len]
+    $n = $nodes[data_len];
+    if exit?
+      exit $n, singult.coffee.node_data $n
+    $container.removeChild $n
 
   return null
 

@@ -192,9 +192,7 @@ singult.coffee.render = (m) ->
 # Unification
 
 #Struct-like thing that holds info needed for unification
-`/**
- * @constructor
- */`
+###* @constructor ###
 singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, force_update_p) ->
   @data = data
   @mapping = mapping
@@ -205,9 +203,7 @@ singult.coffee.Unify = (data, mapping, key_fn, enter, update, exit, force_update
   @force_update_p = force_update_p
   return this
 
-`/**
- * @constructor
- */`
+###* @constructor ###
 singult.coffee.Ignore = -> return this
 
 #Unifies $nodes with data and mapping contained in u.

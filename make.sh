@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-COFFEE_IN=src/coffee/Singult.coffee
-PKG_OUT=pkg/closure-js/libs/singult #dir that'll be sucked into JAR
+COFFEE_IN=src/coffee/singult/coffee.coffee
+PKG_OUT=pkg/singult #dir that'll be sucked into JAR
 JS_OUT=dev_public/js/
 
 #Clean output folder
@@ -17,6 +17,6 @@ mkdir -p $JS_OUT
 
 
 mkdir -p $PKG_OUT
-cp -r $JS_OUT $PKG_OUT/
+cp -r $JS_OUT/* $PKG_OUT/
 
 lein jar

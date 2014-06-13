@@ -19,7 +19,7 @@ echo "Fetching Google Closure compiler..."
     mkdir -p vendor
     cd vendor
     #This -4 forces cURL to use IP4. Without it, cURL gets confused...
-    curl -4 -O http://closure-compiler.googlecode.com/files/compiler-latest.zip
+    curl -4 -O http://dl.google.com/closure-compiler/compiler-latest.zip
     unzip -q compiler-latest.zip
     mv compiler.jar closure-compiler.jar
     rm -f COPYING README compiler-latest.zip
